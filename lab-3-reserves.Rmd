@@ -544,7 +544,7 @@ Is there a pattern in the spatial distribution of the priority areas?
 
 Can you verify that all of the targets were met in the prioritization (hint: eval_feature_representation_summary(p1, s1[, "solution_1"]))?
 
-**Answer:**
+**Answer:** Yes you can verify that the 5% target were met in the prioritization since all `relative_held` values are larger than 5%.
 
 ```{r}
 eval_feature_representation_summary(p1, s1[, "solution_1"])
@@ -653,6 +653,13 @@ spplot(s4, "solution_1", col.regions = c("grey80", "darkgreen"), main = "s4",
 ## Questions
 
 What is the cost of the planning units selected in s2, s3, and s4?
+
+**Answer:**
+
+```{r}
+
+```
+
 
 How many planning units are in s2, s3, and s4?
 
