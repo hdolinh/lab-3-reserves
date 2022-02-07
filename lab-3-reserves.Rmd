@@ -654,20 +654,41 @@ spplot(s4, "solution_1", col.regions = c("grey80", "darkgreen"), main = "s4",
 
 What is the cost of the planning units selected in s2, s3, and s4?
 
-**Answer:**
+**Answer:** The cost of the planning units in s2 is `r round(s2_cost, 2)`. The cost of the planning units in s3 is `r round(s3_cost, 2)`. The cost of the planning units in s4 in `r round(s4_cost, 2)`.
 
 ```{r}
+s2_cost <- eval_cost_summary(p1, s2[, "solution_1"])
 
+s3_cost <- eval_cost_summary(p1, s3[, "solution_1"])
+
+s4_cost <- eval_cost_summary(p1, s4[, "solution_1"])
 ```
 
 
 How many planning units are in s2, s3, and s4?
 
+**Answer:** There are `r pu_s2` planning units in s2. There are `r pu_s3` planning units in s3. There are `r pu_s4` planning units in s4.
+
+```{r}
+pu_s2 <- eval_n_summary(p1, s2[, "solution_1"])
+
+pu_s3 <- eval_n_summary(p1, s3[, "solution_1"])
+
+pu_s4 <- eval_n_summary(p1, s4[, "solution_1"])
+```
+
 Do the solutions with more planning units have a greater cost? Why (or why not)?
+
+**Answers:** The solutions with more planning units have a greater cost because there are more planning units.
 
 Why does the first solution (s1) cost less than the second solution with protected areas locked into the solution (s2)?
 
+**Answers:** s1 costs less than s2 because s2 includes the `locked_in` or protected areas in addition to the prioritization planning units. 
+
 Why does the third solution (s3) cost less than the fourth solution solution with highly degraded areas locked out (s4)? 
+
+**Answers:** s3 costs less than s4 so the highly degraded areas must be lower cost than protected areas or other areas. 
+
 
 ## 4.4 Penalizing fragmentation
 
