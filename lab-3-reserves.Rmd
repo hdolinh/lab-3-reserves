@@ -58,6 +58,7 @@ if (!file.exists(pu_shp)){
   unlink(c(pu_zip, dir_unzip), recursive = T)
 }
 ```
+
 # Data
 
 ## 2.1 Data import
@@ -74,14 +75,12 @@ pu_data$locked_out <- as.logical(pu_data$locked_out)
 veg_data <- stack(vegetation_tif)
 ```
 
-
 ## 2.2 Planning unit data
 
 ```{r}
 # print a short summary of the data
 print(pu_data)
 ```
-
 
 ```{r}
 # plot the planning unit data
@@ -103,76 +102,69 @@ str(pu_data, max.level = 2)
 class(pu_data)
 ```
 
-
 ```{r}
 # print the slots of the object
 slotNames(pu_data)
 ```
-
 
 ```{r}
 # print the coordinate reference system
 print(pu_data@proj4string)
 ```
 
-
 ```{r}
 # print number of planning units (geometries) in the data
 tot_pu <- nrow(pu_data)
 ```
-
 
 ```{r}
 # print the first six rows in the data
 head(pu_data@data)
 ```
 
-
 ```{r}
 # print the first six values in the cost column of the attribute data
 head(pu_data$cost)
 ```
-
 
 ```{r}
 # print the highest cost value
 max_cost <- max(pu_data$cost)
 ```
 
-
 ```{r}
 # print the smallest cost value
 min(pu_data$cost)
 ```
-
 
 ```{r}
 # print average cost value
 mean(pu_data$cost)
 ```
 
-
 ```{r}
 # plot a map of the planning unit cost data
 spplot(pu_data, "cost")
 ```
-
 
 ```{r}
 # plot an interactive map of the planning unit cost data
 mapview(pu_data, zcol = "cost")
 ```
 
-
 ## Questions
+
 How many planning units are in the planning unit data?
+
 **Answer:** There are `r tot_pu` planning units in the planning unit data.
 
 What is the highest cost value?
+
 **Answer:** The highest cost value is `r round(max_cost, 2)`.
 
-Is there a spatial pattern in the planning unit cost values (hint: use plot to make a map)? 
-**Answer:** Yes, from the plots you can see that planning unit cost values are significantly lower in the eastern part of southern Tasmania than central or western southern Tasmania. 
+Is there a spatial pattern in the planning unit cost values (hint: use plot to make a map)?
+
+**Answer:** Yes, from the plots you can see that planning unit cost values are significantly lower in the eastern part of southern Tasmania than central or western southern Tasmania.
 
 # 2.3 Vegetation Data
 
@@ -181,79 +173,65 @@ Is there a spatial pattern in the planning unit cost values (hint: use plot to m
 print(veg_data)
 ```
 
-
 ```{r}
 # plot a map of the 20th vegetation class
 plot(veg_data[[20]])
 ```
-
 
 ```{r}
 # plot an interactive map of the 20th vegetation class
 mapview(veg_data[[20]])
 ```
 
-
 ```{r}
 # print number of rows in the data
 nrow(veg_data)
 ```
-
 
 ```{r}
 # print number of columns  in the data
 ncol(veg_data)
 ```
 
-
 ```{r}
 # print number of cells in the data
 ncell(veg_data)
 ```
-
 
 ```{r}
 # print number of layers in the data
 nlayers(veg_data)
 ```
 
-
-
 ```{r}
 # print resolution on the x-axis
 xres(veg_data)
 ```
-
 
 ```{r}
 # print resolution on the y-axis
 yres(veg_data)
 ```
 
-
 ```{r}
 # print spatial extent of the grid, i.e. coordinates for corners
 extent(veg_data)
 ```
-
 
 ```{r}
 # print the coordinate reference system
 print(veg_data@crs)
 ```
 
-
 ```{r}
 # print a summary of the first layer in the stack
 print(veg_data[[1]])
 ```
 
-
 ```{r}
 # print the value in the 800th cell in the first layer of the stack
 print(veg_data[[1]][800])
 ```
-
 
 ```{r}
 # print the value of the cell located in the 30th row and the 60th column of
@@ -261,32 +239,28 @@ print(veg_data[[1]][800])
 print(veg_data[[1]][30, 60])
 ```
 
-
 ```{r}
 # calculate the sum of all the cell values in the first layer
 cellStats(veg_data[[1]], "sum")
 ```
-
 
 ```{r}
 # calculate the maximum value of all the cell values in the first layer
 cellStats(veg_data[[1]], "max")
 ```
 
-
 ```{r}
 # calculate the minimum value of all the cell values in the first layer
 cellStats(veg_data[[1]], "min")
 ```
-
 
 ```{r}
 # calculate the mean value of all the cell values in the first layer
 cellStats(veg_data[[1]], "mean")
 ```
 
-
 ## Questions
+
 What part of the study area is the 13th vegetation class found in (hint: make a map)? For instance, is it in the south-eastern part of the study area?
 
 **Answer::** The study area of the 13th vegetation class is in the eastern part of Tasmania and is most dense in the north-east.
@@ -295,8 +269,8 @@ What part of the study area is the 13th vegetation class found in (hint: make a 
 mapview(veg_data[[13]])
 ```
 
-
 What proportion of cells contain the 12th vegetation class?
+
 **Answer:** 1.53%
 
 ```{r}
@@ -305,17 +279,17 @@ What proportion of cells contain the 12th vegetation class?
 # freq_12 <- freq(veg_data[[12]])
 ```
 
-Which vegetation class is the most abundant (i.e. present in the greatest number of cells)? 
-**Answer:** for i in seq_along()
-- create an empty data frame
-- have to create proportions first using a for loop
-- then do which.max or max
+Which vegetation class is the most abundant (i.e. present in the greatest number of cells)?
+
+**Answer:** The most abundant vegetation class is `r veg_max`.
 
 ```{r}
-for i in 
+veg_stats <- cellStats(veg_data, "sum", na.rm = TRUE)
+
+veg_max <- which.max(veg_stats)
 ```
 
-# 3 Gap Analysis 
+# 3 Gap Analysis
 
 ## 3.2 Feature Abundance
 
@@ -334,14 +308,12 @@ abundance_data <- feature_abundances(p0)
 print(abundance_data)
 ```
 
-
 ```{r}
 # note that only the first ten rows are printed,
 # this is because the abundance_data object is a tibble (i.e. tbl_df) object
 # and not a standard data.frame object
 print(class(abundance_data))
 ```
-
 
 ```{r}
 # we can print all of the rows in abundance_data like this
@@ -359,7 +331,6 @@ abundance_data$absolute_abundance_km2 <-
 print(abundance_data)
 ```
 
-
 ```{r}
 # add new column with feature abundances in km^2
 abundance_data$absolute_abundance_km2 <-
@@ -371,12 +342,10 @@ abundance_data$absolute_abundance_km2 <-
 print(abundance_data)
 ```
 
-
 ```{r}
 # calculate the average abundance of the features
 mean(abundance_data$absolute_abundance_km2)
 ```
-
 
 ```{r}
 # plot histogram of the features' abundances
@@ -388,7 +357,6 @@ hist(abundance_data$absolute_abundance_km2, main = "Feature abundances")
 max(abundance_data$absolute_abundance_km2)
 ```
 
-
 ```{r}
 # find the name of the feature with the largest abundance
 abundance_data$feature[which.max(abundance_data$absolute_abundance_km2)]
@@ -397,6 +365,7 @@ abundance_data$feature[which.max(abundance_data$absolute_abundance_km2)]
 ## Questions
 
 What is the median abundance of the features (hint: median)?
+
 **Answer:** The median abundance of the features is `r round(median_feat, 2)`.
 
 ```{r}
@@ -404,13 +373,14 @@ median_feat <- median(abundance_data$absolute_abundance_km2)
 ```
 
 What is the name of the feature with smallest abundance?
+
 **Answer:** The name of the feature with the smallest abundance is `feat_sm`.
 
 ```{r}
 feat_sm <- abundance_data$feature[which.min(abundance_data$absolute_abundance_km2)]
 ```
 
-How many features have a total abundance greater than 100 km^2 (hint: use sum(abundance_data$absolute_abundance_km2 > set_units(threshold, km^2) with the correct threshold value)?
+How many features have a total abundance greater than 100 km\^2 (hint: use sum(abundance_data\$absolute_abundance_km2 \> set_units(threshold, km\^2) with the correct threshold value)?
 
 **Answer:** Six features have a total abundance greater than 100 $km^2$.
 
@@ -434,15 +404,15 @@ print(repr_data)
 
 ## Questions
 
-What is the average proportion of the features held in protected areas (hint: use mean(table$relative_held) with the correct table name)?
+What is the average proportion of the features held in protected areas (hint: use mean(table\$relative_held) with the correct table name)?
 
-**Answer:** The average proportion of the features held in protected areas is `r round(mean_pa, 2)`. 
+**Answer:** The average proportion of the features held in protected areas is `r round(mean_pa, 2)`.
 
 ```{r}
 mean_pa <- mean(repr_data$relative_held)
 ```
 
-If we set a target of 10% coverage by protected areas, how many features fail to meet this target (hint: use sum(table$relative_held >= target_value) with the correct table name)?
+If we set a target of 10% coverage by protected areas, how many features fail to meet this target (hint: use sum(table\$relative_held \>= target_value) with the correct table name)?
 
 **Answer:** `r pa_10` features fail to meet this target.
 
@@ -451,7 +421,6 @@ target_value_10 = 0.10
 
 pa_10 <- sum(repr_data$relative_held >= target_value_10) 
 ```
-
 
 If we set a target of 20% coverage by protected areas, how many features fail to meet this target?
 
@@ -504,18 +473,15 @@ s1 <- solve(p1)
 print(s1)
 ```
 
-
 ```{r}
 # calculate number of planning units selected in the prioritization
 pu_selected <- eval_n_summary(p1, s1[, "solution_1"])
 ```
 
-
 ```{r}
 # calculate total cost of the prioritization
 eval_cost_summary(p1, s1[, "solution_1"])
 ```
-
 
 ```{r}
 # plot solution
@@ -524,19 +490,17 @@ spplot(s1, "solution_1", col.regions = c("grey80", "darkgreen"), main = "s1",
        colorkey = FALSE)
 ```
 
-
 ## Questions
 
 How many planing units were selected in the prioritization? What proportion of planning units were selected in the prioritization?
 
-**Answer:** There were `r round(pu_prop_selected, 2)` planning units selected in the prioritization. 
+**Answer:** There were `r round(pu_prop_selected, 2)` planning units selected in the prioritization.
 
 ```{r}
 pu_prop_selected <- as.numeric(pu_selected) / length(s1$id)
 
 15 / length(s1$id)
 ```
-
 
 Is there a pattern in the spatial distribution of the priority areas?
 
@@ -550,8 +514,7 @@ Can you verify that all of the targets were met in the prioritization (hint: eva
 eval_feature_representation_summary(p1, s1[, "solution_1"])
 ```
 
-
-## 4.3 Adding complexity 
+## 4.3 Adding complexity
 
 ```{r}
 # plot locked_in data
@@ -559,7 +522,6 @@ eval_feature_representation_summary(p1, s1[, "solution_1"])
 spplot(pu_data, "locked_in", col.regions = c("grey80", "darkblue"),
        main = "locked_in", colorkey = FALSE)
 ```
-
 
 ```{r}
 # make prioritization problem
@@ -587,7 +549,6 @@ spplot(s2, "solution_1", col.regions = c("grey80", "darkgreen"), main = "s2",
        colorkey = FALSE)
 ```
 
-
 ```{r}
 # make prioritization problem
 p3_rds <- file.path(dir_data, "p3.rds")
@@ -614,14 +575,12 @@ spplot(s3, "solution_1", col.regions = c("grey80", "darkgreen"), main = "s3",
        colorkey = FALSE)
 ```
 
-
 ```{r}
 # plot locked_out data
 # TRUE = red, FALSE = grey
 spplot(pu_data, "locked_out", col.regions = c("grey80", "darkred"),
        main = "locked_out", colorkey = FALSE)
 ```
-
 
 ```{r}
 # make prioritization problem
@@ -657,24 +616,23 @@ What is the cost of the planning units selected in s2, s3, and s4?
 **Answer:** The cost of the planning units in s2 is `r round(s2_cost, 2)`. The cost of the planning units in s3 is `r round(s3_cost, 2)`. The cost of the planning units in s4 in `r round(s4_cost, 2)`.
 
 ```{r}
-s2_cost <- eval_cost_summary(p1, s2[, "solution_1"])
+s2_cost <- eval_cost_summary(p2, s2[, "solution_1"])
 
-s3_cost <- eval_cost_summary(p1, s3[, "solution_1"])
+s3_cost <- eval_cost_summary(p3, s3[, "solution_1"])
 
-s4_cost <- eval_cost_summary(p1, s4[, "solution_1"])
+s4_cost <- eval_cost_summary(p4, s4[, "solution_1"])
 ```
-
 
 How many planning units are in s2, s3, and s4?
 
 **Answer:** There are `r pu_s2` planning units in s2. There are `r pu_s3` planning units in s3. There are `r pu_s4` planning units in s4.
 
 ```{r}
-pu_s2 <- eval_n_summary(p1, s2[, "solution_1"])
+pu_s2 <- eval_n_summary(p2, s2[, "solution_1"])
 
-pu_s3 <- eval_n_summary(p1, s3[, "solution_1"])
+pu_s3 <- eval_n_summary(p3, s3[, "solution_1"])
 
-pu_s4 <- eval_n_summary(p1, s4[, "solution_1"])
+pu_s4 <- eval_n_summary(p4, s4[, "solution_1"])
 ```
 
 Do the solutions with more planning units have a greater cost? Why (or why not)?
@@ -683,12 +641,13 @@ Do the solutions with more planning units have a greater cost? Why (or why not)?
 
 Why does the first solution (s1) cost less than the second solution with protected areas locked into the solution (s2)?
 
-**Answers:** s1 costs less than s2 because s2 includes the `locked_in` or protected areas in addition to the prioritization planning units. 
+**Answers:** s1 costs less than s2 because s2 includes the `locked_in` or protected areas in addition to the prioritization planning units.
 
-Why does the third solution (s3) cost less than the fourth solution solution with highly degraded areas locked out (s4)? 
+constraints are why it is more expensive bc the cream of the crop is gone so we're taking second best.
 
-**Answers:** s3 costs less than s4 so the highly degraded areas must be lower cost than protected areas or other areas. 
+Why does the third solution (s3) cost less than the fourth solution solution with highly degraded areas locked out (s4)?
 
+**Answers:** s3 costs less than s4 so the highly degraded areas must be lower cost than protected areas or other areas.
 
 ## 4.4 Penalizing fragmentation
 
@@ -719,7 +678,6 @@ s5 <- solve(p5)
 print(s5)
 ```
 
-
 ```{r}
 # plot solution
 # selected = green, not selected = grey
@@ -731,8 +689,16 @@ spplot(s5, "solution_1", col.regions = c("grey80", "darkgreen"), main = "s5",
 
 What is the cost the fourth (s4) and fifth (s5) solutions? Why does the fifth solution (s5) cost more than the fourth (s4) solution?
 
+cost 4 
+cost 5
+
+we are clumping them and we have the boundary penalty it's 
 
 Try setting the penalty value to 0.000000001 (i.e. 1e-9) instead of 0.001. What is the cost of the solution now? Is it different from the fourth solution (s4) (hint: try plotting the solutions to visualize them)? Is this is a useful penalty value? Why (or why not)?
 
+the maps look pretty identical with some slight differences but overall a low, low penalty value doesn't do anything
 
-Try setting the penalty value to 0.5. What is the cost of the solution now? Is it different from the fourth solution (s4) (hint: try plotting the solutions to visualize them)? Is this a useful penalty value? Why (or why not)? 
+Try setting the penalty value to 0.5. What is the cost of the solution now? Is it different from the fourth solution (s4) (hint: try plotting the solutions to visualize them)? Is this a useful penalty value? Why (or why not)?
+
+one giant clump
+this extreme is also not useful because it also makes the cost high
