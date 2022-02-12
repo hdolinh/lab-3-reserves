@@ -1,9 +1,9 @@
 ---
 title: 'Lab 3: Reserve Planning using prioritizr'
 author: "Halina Do-Linh"
-date: "1/26/2022"
+date: "`r Sys.Date()`"
 output:
-    html_document:
+  html_document:
     toc: true
     toc_float: true
     code_folding: show
